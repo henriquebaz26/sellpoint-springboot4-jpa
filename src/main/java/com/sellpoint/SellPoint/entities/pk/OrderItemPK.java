@@ -2,6 +2,7 @@ package com.sellpoint.SellPoint.entities.pk;
 
 import java.io.Serializable;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.sellpoint.SellPoint.entities.Order;
 import com.sellpoint.SellPoint.entities.Product;
 
@@ -19,6 +20,9 @@ public class OrderItemPK implements Serializable {
     @ManyToOne
     @JoinColumn(name = "product_id")
     private Product product;
+
+    public OrderItemPK() {
+    }
     
     public Order getOrder() {
         return order;

@@ -12,6 +12,8 @@ import com.sellpoint.SellPoint.repositories.UserRepository;
 import com.sellpoint.SellPoint.services.exceptions.DatabaseException;
 import com.sellpoint.SellPoint.services.exceptions.ResourceNotFoundException;
 
+import jakarta.persistence.EntityNotFoundException;
+
 @Service
 public class UserService {
 
@@ -29,7 +31,7 @@ public class UserService {
 
     public User insert(User obj) {
         return repository.save(obj);
-    } 
+    }
 
     public void delete(Long id) {
         if (!repository.existsById(id)) {
@@ -44,9 +46,13 @@ public class UserService {
     }
 
     public User update(Long id, User obj) {
-        User entity = repository.getReferenceById(id);
-        updateData(entity, obj);
-        return repository.save(entity);
+        try {
+            User entity = repository.getReferenceById(id);
+            updateData(entity, obj);
+            return repository.save(entity);
+        } catch (EntityNotFoundException e) {
+            throw new ResourceNotFoundException(id);
+        }
     }
 
     private void updateData(User entity, User obj) {
